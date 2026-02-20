@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوابة رمضان الشاملة 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root { --gold:#f1c40f; --card:#fff8f0; --text:#222; --wall:#5d4037; }
+body {background:#fdf5e6; color:var(--text); font-family:'Cairo',sans-serif; margin:0; padding-bottom:50px; text-align:center; overflow-x:hidden;}
+.rope {position:fixed;top:0;width:100%;height:60px;background:url('https://i.ibb.co/2YhV1sGb/png-transparent-light-light-source-holiday-decorations-illumination-1-removebg-preview.png') repeat-x;background-size:contain;z-index:999;animation:glow 2s infinite alternate;}
+@keyframes glow{0%{filter:drop-shadow(0 0 5px var(--gold));}50%{filter:drop-shadow(0 0 15px var(--gold));}100%{filter:drop-shadow(0 0 25px var(--gold));}}
+.container{max-width:900px;margin:auto;padding:10px;}
+.card{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:20px;margin:20px 0;box-shadow:0 0 15px rgba(241,196,15,0.3);}
+canvas{background:#000;border:4px solid var(--gold);display:block;margin:auto;border-radius:10px;}
+.controls{display:grid;grid-template-columns:repeat(3,75px);gap:10px;justify-content:center;margin-top:15px;}
+.btn-ctrl{width:75px;height:75px;background:#fff8f0;border:2px solid var(--gold);color:var(--text);border-radius:15px;font-size:24px;cursor:pointer;box-shadow:0 0 5px rgba(241,196,15,0.5);}
+.btn-ctrl:active{background:var(--gold);color:black;}
+.scroll-box{height:100px;overflow-y:auto;background:#fff5e0;padding:10px;border-radius:10px;border:2px solid var(--gold);margin:10px 0;font-size:1.1rem;}
+.quiz-option{display:block;width:100%;padding:12px;margin:8px 0;background:#fff5e0;border:2px solid var(--gold);color:var(--text);border-radius:8px;cursor:pointer;text-align:right;}
+.main-btn{background:var(--gold);color:black;border:none;padding:12px 25px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:1rem;}
+#answer-feedback{display:none;padding:10px;margin:10px 0;font-weight:bold;color:white;border-radius:10px;}
+.footer{margin-top:50px; color:#555; font-size:1rem; line-height:1.5; text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="rope"></div>
+<div class="container">
+<h>رمضان كريم</h>
+    <div class="prayer-container" style="position: relative; z-index: 10; margin-top: 20px;">
+        <h3 style="margin: 10px 0; font-size: 1.2rem; color: #ffcc00; text-align: center;">🕒 مواقيت الصلاة - الأردن</h3>
+        <div style="width: 100%; overflow: hidden; border-radius: 15px;">
+            <iframe id="iframe3" 
+                src="https://timesprayer.today/widget_frame.php?frame=3&id=355&sound=false" 
+                style="width: 100%; height: 363px; border: none; filter: invert(90%) hue-rotate(180deg) brightness(1.1); display: block;">
+            </iframe>
+        </div>
+    </div>
+
+<!-- القرآن -->
+<div class="card">
+<h3>📖 القرآن الكريم</h3>
+<button class="main-btn" onclick="window.open('https://quran.ksu.edu.sa/m.php#aya=1_1&t=1','_blank')">فتح المصحف</button>
+</div>
+
+<!-- الأدعية -->
+<div class="card">
+<h3>🤲 أدعية رمضانية</h3>
+<div id="dua-box" class="scroll-box"></div>
+<button class="main-btn" onclick="nextDua()">دعاء آخر</button>
+</div>
+
+<!-- الأذكار -->
+<div class="card">
+<h3>✨ أذكار رمضانية</h3>
+<div id="azkar-box" class="scroll-box"></div>
+<button class="main-btn" onclick="nextZekr()">ذكر آخر</button>
+</div>
+
+
+<div class="card">
+    <h2>🎮 متاهة الفوانيس</h2>
+    <button id="start-btn" class="main-btn">ابدأ اللعبة</button>
+    <button id="end-btn" class="main-btn">توقف اللعبة</button>
+    <p>المرحلة: <span id="lvl">1</span> | الفوانيس: <span id="coll-count">0</span> / 3</p>
+    <canvas id="game" width="320" height="320"></canvas>
+    <div class="controls">
+        <div></div><button class="btn-ctrl" onclick="move(0,-1)">⬆️</button><div></div>
+        <button class="btn-ctrl" onclick="move(1,0)">➡️</button>
+        <button class="btn-ctrl" onclick="move(0,1)">⬇️</button>
+        <button class="btn-ctrl" onclick="move(-1,0)">⬅️</button>
+    </div>
+</div>
+<!-- مسابقة رمضان -->
+<div class="card">
+<h2>❓مسابقة رمضان</h2>
+<p id="q-text" style="color:var(--gold);font-size:1.2rem;"></p>
+<div id="options-container"></div>
+<div id="answer-feedback"></div>
+<p>السؤال: <span id="q-num">1</span>/100 | النقاط: <span id="quiz-score">0</span></p>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+هذا الموقع إهداء لشخص غالي H🥹♥️ <br> 
+اللهم اجعله في ميزان حسناتها 🤲🥹 <br>
+<span style="font-size: 0.8rem; opacity: 0.7;">(جميع الحقوق محفوظة ©)</span>
+</div>
+
+<script>
+// ====== الأدعية والأذكار ======
+const duas = [
+    "اللهم بلغنا رمضان وأنت راضٍ عنا",
+    "اللهم اجعل صيامنا مقبولاً",
+    "اللهم أعنا على قيام الليل",
+    "اللهم اجعلنا من عتقائك من النار",
+    "اللهم اغفر لنا ذنوبنا",
+    "اللهم اجعلنا ممن يكتب لهم الخير",
+    "اللهم تقبل صيامنا وقيامنا",
+    "اللهم ارزقنا بركة هذا الشهر",
+    "اللهم اجعلنا من المقبولين",
+    "اللهم اجعلنا من أهل القرآن",
+    "اللهم اجعلنا من عبادك الصالحين",
+    "اللهم ممن يغتنم ليالي رمضان",
+    "اللهم أعنا على الصيام والقيام",
+    "اللهم اجعلنا ممن يفرح بقدوم رمضان"
+];
+const azkar = [
+    "سبحان الله وبحمده",
+    "أستغفر الله",
+    "الحمد لله",
+    "لا إله إلا الله",
+    "الله أكبر",
+    "سبحان الله العظيم",
+    "لا حول ولا قوة إلا بالله",
+    "سبحان الله وبحمده سبحان الله العظيم",
+    "اللهم صلِ وسلم على نبينا محمد",
+    "اللهم اجعل ذكرنا خالصاً لك"
+];
+
+function nextDua(){
+    document.getElementById('dua-box').innerText = duas[Math.floor(Math.random() * duas.length)];
+}
+function nextZekr(){
+    document.getElementById('azkar-box').innerText = azkar[Math.floor(Math.random() * azkar.length)];
+}
+
+// ====== اللعبة ======
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const tile = 32;
+let player = {x:1,y:1}, enemy = {x:8,y:8}, boxes = [], collected=0, level=1;
+let maze = [], countdown=0, countdownActive=false;
+let gameRunning = false; // اللعبة متوقفة عند دخول الصفحة
+
+function generateMaze() {
+    let m;
+    let valid = false;
+    while(!valid) {
+        m = Array.from({length:10}, ()=>Array(10).fill(0));
+        for(let i=0;i<10;i++){ m[0][i]=1; m[9][i]=1; m[i][0]=1; m[i][9]=1; }
+        let wallCount=15;
+        while(wallCount>0){
+            let x=Math.floor(Math.random()*8)+1;
+            let y=Math.floor(Math.random()*8)+1;
+            if((x===1 && y===1)||m[y][x]===1) continue;
+            m[y][x]=1; wallCount--;
+        }
+        enemy = {x:8,y:8};
+        boxes = [];
+        while(boxes.length<7){
+            let x=Math.floor(Math.random()*8)+1, y=Math.floor(Math.random()*8)+1;
+            if(m[y][x]===0 && (x!==1||y!==1) && (x!==enemy.x||y!==enemy.y)) boxes.push({x,y});
+        }
+        valid = boxes.every(b=>isReachable(1,1,b.x,b.y,m)) && isReachable(1,1,enemy.x,enemy.y,m);
+    }
+    return m;
+}
+
+function isReachable(sx,sy,tx,ty,m){
+    let visited = Array.from({length:10}, ()=>Array(10).fill(false));
+    let queue=[[sx,sy]]; visited[sy][sx]=true;
+    const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+    while(queue.length>0){
+        let [x,y]=queue.shift();
+        if(x===tx && y===ty) return true;
+        for(let [dx,dy] of dirs){
+            let nx=x+dx, ny=y+dy;
+            if(nx>=0 && nx<10 && ny>=0 && ny<10 && !visited[ny][nx] && m[ny][nx]===0){
+                visited[ny][nx]=true;
+                queue.push([nx,ny]);
+            }
+        }
+    }
+    return false;
+}
+
+function startLevel(){
+    player={x:1,y:1}; boxes=[]; collected=0; countdownActive=false;
+    maze = generateMaze();
+    document.getElementById("coll-count").innerText="0";
+    while(boxes.length<7){
+        let x=Math.floor(Math.random()*8)+1, y=Math.floor(Math.random()*8)+1;
+        if(maze[y][x]===0 && !boxes.find(b=>b.x===x && b.y===y)) boxes.push({x,y,open:false,lantern:false});
+    }
+    [...boxes].sort(()=>Math.random()-0.5).slice(0,3).forEach(b=>b.lantern=true);
+    draw();
+}
+
+function draw(){
+    ctx.clearRect(0,0,320,320);
+    for(let y=0;y<10;y++) for(let x=0;x<10;x++)
+        if(maze[y][x]===1) ctx.fillStyle="#5d4037", ctx.fillRect(x*tile,y*tile,tile,tile);
+    ctx.font="20px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    boxes.forEach(b=>ctx.fillText(b.open?(b.lantern?"🏮":"❌"):"📦",b.x*tile+tile/2,b.y*tile+tile/2));
+    ctx.fillText("🚶",player.x*tile+tile/2,player.y*tile+tile/2);
+    ctx.fillText("🥣",enemy.x*tile+tile/2,enemy.y*tile+tile/2);
+    if(countdownActive){ctx.fillStyle="red"; ctx.font="40px Arial"; ctx.fillText(countdown,160,50);}
+}
+
+function move(dx,dy){
+    if(!gameRunning) return;
+    let nx=player.x+dx, ny=player.y+dy;
+    if(maze[ny][nx]===0) player={x:nx,y:ny};
+    boxes.forEach(b=>{
+        if(!b.open && b.x===player.x && b.y===player.y){
+            b.open=true;
+            if(b.lantern) collected++;
+            document.getElementById("coll-count").innerText=collected;
+        }
+    });
+    checkCollision(); draw();
+    if(collected===3){ 
+        alert("انتهت المرحلة "+level+"!");
+        level++;
+        document.getElementById("lvl").innerText=level;
+        startLevel();
+    }
+}
+
+function moveEnemy(){
+    if(!gameRunning) return;
+    if(Math.random()>0.3){
+        if(enemy.x<player.x && maze[enemy.y][enemy.x+1]===0) enemy.x++;
+        else if(enemy.x>player.x && maze[enemy.y][enemy.x-1]===0) enemy.x--;
+        if(enemy.y<player.y && maze[enemy.y+1][enemy.x]===0) enemy.y++;
+        else if(enemy.y>player.y && maze[enemy.y-1][enemy.x]===0) enemy.y--;
+    }
+    checkCollision(); draw();
+}
+setInterval(moveEnemy,500);
+
+function checkCollision(){
+    let dx=Math.abs(player.x-enemy.x), dy=Math.abs(player.y-enemy.y);
+    if(dx<=1 && dy<=1 && !countdownActive){
+        countdownActive=true; countdown=3;
+        let timer=setInterval(()=>{
+            countdown--; draw();
+            if(countdown<=0){
+                clearInterval(timer);
+                if(Math.abs(player.x-enemy.x)<=1 && Math.abs(player.y-enemy.y)<=1){
+                    alert("🥣 مسكك صحن التمر 😔 لقد خسرت!");
+                    gameRunning = false; // توقف اللعبة عند الخسارة
+                    player={x:1,y:1};
+                    enemy={x:8,y:8};
+                    boxes=[];
+                    collected=0;
+                    level=1;
+                    document.getElementById("lvl").innerText=level;
+                    document.getElementById("coll-count").innerText=collected;
+                    maze = Array.from({length:10}, ()=>Array(10).fill(0));
+                    draw();
+                }
+                countdownActive=false;
+            }
+        },1000);
+    }
+    if(dx>2 || dy>2) countdownActive=false;
+}
+
+// ====== الكيبورد ======
+window.onkeydown = e => {
+    if(e.key==="ArrowUp") move(0,-1);
+    if(e.key==="ArrowDown") move(0,1);
+    if(e.key==="ArrowLeft") move(-1,0);
+    if(e.key==="ArrowRight") move(1,0);
+};
+
+// ====== Quiz مع Feedback ======
+let qIdx=0, score=0;
+const questions=[
+    {q:"كم عدد أركان الإسلام؟",o:["3","5","4","6"],c:1},
+    {q:"ما هو الشهر الذي نزل فيه القرآن؟",o:["شوال","رمضان","شعبان","رجب"],c:1},
+    {q:"ما هي القبلة في الصلاة؟",o:["المدينة","الكعبة","القدس","مكة"],c:1},
+    {q:"ما هي اولى القبلتين؟",o:["المدينة","الكعبة","القدس","مكة"],c:2},
+];
+
+function loadQuiz(){
+    let q=questions[qIdx];
+    document.getElementById("q-text").innerText=q.q;
+    document.getElementById("q-num").innerText=qIdx+1;
+    let cont=document.getElementById("options-container");
+    cont.innerHTML="";
+    q.o.forEach((opt,i)=>{
+        let btn=document.createElement("button");
+        btn.className="quiz-option";
+        btn.innerText=opt;
+        btn.onclick=()=>{
+            const feedback=document.getElementById("answer-feedback");
+            if(i===q.c){
+                score+=10;
+                feedback.innerText="✅ إجابة صحيحة!";
+                feedback.style.background="#4CAF50";
+            } else {
+                feedback.innerText="❌ إجابة خاطئة!";
+                feedback.style.background="#F44336";
+            }
+            feedback.style.display="block";
+            setTimeout(()=>{feedback.style.display="none";},2000);
+            qIdx++;
+            if(qIdx>=questions.length) qIdx=0;
+            document.getElementById("quiz-score").innerText=score;
+            loadQuiz();
+        };
+        cont.appendChild(btn);
+    });
+}
+
+// ====== أزرار البداية والنهاية للعبة ======
+document.getElementById("start-btn").onclick = function(){
+    gameRunning = true;
+    startLevel();
+};
+document.getElementById("end-btn").onclick = function(){
+    gameRunning = false;
+    player={x:1,y:1};
+    enemy={x:8,y:8};
+    boxes=[];
+    collected=0;
+    level=1;
+    document.getElementById("lvl").innerText = level;
+    document.getElementById("coll-count").innerText = collected;
+    maze = Array.from({length:10},()=>Array(10).fill(0));
+    draw();
+};
+
+// ====== تشغيل الأدعية والأذكار والـ Quiz ======
+nextDua(); nextZekr(); loadQuiz();
+</script>
+<!-- نافذة الأذكار اليومية -->
+<div id="azkar-modal" style="
+    display:none;
+    position:fixed;
+    top:50%; left:50%;
+    transform:translate(-50%, -50%);
+    width:90%; max-width:600px;
+    max-height:80%;
+    overflow-y:auto;
+    background:#1a1a1a;
+    color:#ffcc00;
+    border:2px solid #ffcc00;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 0 20px rgba(255,204,0,0.5);
+    z-index:9999;
+">
+    <img src="https://pbs.twimg.com/media/GwoZdivXoAAB2wN.jpg" alt="أذكار رمضان" style="width:100%; border-radius:15px; margin-bottom:15px;">
+    <div style="text-align:right; line-height:1.6; font-size:1rem;">
+        - اللهم لا تؤاخذنا بما فعلنا من معاص وأخطاء، واغفر لنا واقض حوائجنا، وأعز الإسلام والمسلمين يا أرحم الراحمين.<br><br>
+        - ربنا إني أعوذ بك من علم لا ينفع، ومن قلب لا يخشع، ومن دعوة لا يُستجاب لها يا أرحم الراحمين.<br><br>
+        - اللهم إنا ندعوك ونتقرب لك بالدعاء إليك في الشهر الكريم، ونرجو رحمتك ونخشى عذابك فلا تردنا يا الله.<br><br>
+        - ربنا افتح لنا أبواب جنتك، وأدخلنا برحمتك، وتجاوز عن خطايانا ولا تنظر إلى أعمالنا السيئة يا رب العالمين.<br><br>
+        - اللهم إنا نسألك أن تشد على عضدنا من أجل طاعتك، واجعلنا من الملبين والخاشعين يا الله.<br><br>
+        - يا رب ارزقنا طاعتك مع الأخيار، وجنبنا مرافقة الأشرار، والابتعاد عن النار، وقربنا من دار القرار.<br><br>
+        - اللهم يا الله بلغنا شهر رمضان الكريم واجعلنا من المسلمين التائبين الخاشعين، واجعل قلوبنا خاشعة في طاعتك وحريصة على رضاك.<br><br>
+        - ربنا لا تخرجنا من شهر رمضان إلا وأنت راضٍ عنا واغفر لذنوبنا عاجلها ورجالها يا رب العالمين.<br><br>
+        - اللهم نبهنا إلى خياراته وبركاته، وارزقنا فيه بدعوة مستجابة تغفر ذنوبنا، ويعتق بها رقابنا من النار.<br><br>
+        * الأذكار القصيرة في رمضان: يا مقلب القلوب والأبصار، ثبت قلوبنا على دينك - سبحان الله وبحمده سبحان الله العظيم.<br><br>
+        - اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار.<br><br>
+        - إنا نعوذ بك يا الله من العجز والكسل، والجبن والبخل، وغلبة الدين وقهر الرجال.<br><br>
+        - اللهم أنى أسألك باسمك الأعظم ألا تكلني إلى نفسي طرفة عين، وأعني على رضاك وطاعتك.<br><br>
+        - يا مقلب القلوب والأبصار، ثبت قلوبنا على دينك.<br><br>
+        - اللهم ارزقنا العفو والعافية في الدنيا والآخرة، اللهم لا ترد دعاءنا يا رب العالمين.<br><br>
+        - أسأل الله الكريم رب العرش العظيم أن يغفر لنا ذنوبنا، وإسرافنا في أمرنا، وثبت أقدامنا على طاعتك.<br><br>
+        - اللهم أصلح لي ديني الذي هو عصمة أمري، وأصلح لي دنياي التي فيها معاشي، وأصلح لي آخرتي التي إليها معادي.<br><br>
+        - ربنا اجعل الحياة زيادة لي في كل خير، واجعل الموت راحة لي من كل شر، ولا تتوفنا إلا وأنت راضٍ عنا اللهم قرّبني فيه إلى مرضاتك، وجنّبني فيه من سخطك ونقماتك، ووفّقني فيه لقراءة آياتك برحمتك يا أرحم الراحمين.<br><br>
+        - اللهم اجعلني فيه من المستغفرين، ومن عبادك الصالحين القانتين، واجعلني فيه من أوليائك المُتّقين برأفتك يا أرحم الراحمين.<br><br>
+        - اللهم أعنّي فيه على صيامه وقيامه، وجنّبني فيه من هفواته وآثامه، وارزقني فيه ذكرك وشكرك بدوامه وبتوفيقك يا هادي المُضلّين.
+    </div>
+    <button onclick="document.getElementById('azkar-modal').style.display='none'" style="
+        margin-top:15px;
+        padding:10px 20px;
+        border:none;
+        border-radius:10px;
+        background:#ffcc00;
+        color:#000;
+        font-weight:bold;
+        cursor:pointer;
+        display:block;
+        margin-left:auto;
+        margin-right:auto;
+    ">إغلاق</button>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const firstBox = document.querySelectorAll('.bottom-section .box')[0];
+    if (firstBox) {
+        firstBox.onclick = function() {
+            document.getElementById('azkar-modal').style.display = 'block';
+        };
+    }
+});
+</script>
+</body>
+</html>

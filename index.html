@@ -1,9 +1,116 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
+<he
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Intro - YouTube</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+
+        /* حاوية شاشة الدخول */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999; background: #000;
+            transition: opacity 1.5s ease;
+        }
+
+        /* حاوية الفيديو لضمان ملء الشاشة */
+        .video-foreground {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* لمنع النقر على أزرار يوتيوب */
+        }
+
+        /* تضمين يوتيوب */
+        #intro-screen iframe {
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            transform: scale(1.5); /* تكبير بسيط لإخفاء الحواف السوداء */
+        }
+
+        /* شريط التحميل */
+        .loader-container {
+            position: absolute;
+            bottom: 10%; left: 50%;
+            transform: translateX(-50%);
+            width: 250px; text-align: center; z-index: 10000;
+        }
+
+        .loader-bar {
+            width: 100%; height: 3px;
+            background: rgba(255,255,255,0.2);
+            margin-top: 10px; border-radius: 5px; overflow: hidden;
+        }
+
+        .loader-progress {
+            width: 0%; height: 100%;
+            background: #00d4ff; box-shadow: 0 0 10px #00d4ff;
+        }
+
+        .loading-text { color: #fff; font-size: 10px; letter-spacing: 3px; font-family: sans-serif; }
+
+        /* المحتوى الأساسي */
+        #main-site {
+            color: white; text-align: center; padding-top: 45vh;
+            font-family: sans-serif; opacity: 0; transition: 2s;
+        }
+
+        .fade-out { opacity: 0 !important; visibility: hidden; }
+        .show { opacity: 1 !important; }
+    </style>
+<
+<body>
+
+    <div id="intro-screen">
+        <div class="video-foreground">
+            <iframe src="https://www.youtube.com/embed/EgmUDwEYeoo?autoplay=1&mute=1&controls=0&loop=1&playlist=EgmUDwEYeoo&showinfo=0&rel=0" 
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+
+        <div class="loader-container">
+            <div class="loading-text">تحميل...🔄</div>
+            <div class="loader-bar"><div class="loader-progress" id="bar"></div></div>
+        </div>
+    </div>
+
+    <div id="main-site">
+           </div>
+
+    <script>
+        window.onload = function() {
+            let bar = document.getElementById('bar');
+            let intro = document.getElementById('intro-screen');
+            let main = document.getElementById('main-site');
+            let width = 0;
+
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    intro.classList.add('fade-out');
+                    setTimeout(() => {
+                        main.classList.add('show');
+                        document.body.style.overflow = "auto";
+                    }, 1000);
+                } else {
+                    width += Math.random() * 5;
+                    if (width > 100) width = 100;
+                    bar.style.width = width + '%';
+                }
+            }, 150);
+        };
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوابة رمضان الشاملة 2026</title>
+<title>رمضان السنه غير🥹♥️</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root { --gold:#f1c40f; --card:#fff8f0; --text:#222; --wall:#5d4037; }
@@ -13,7 +120,7 @@ body {background:#fdf5e6; color:var(--text); font-family:'Cairo',sans-serif; mar
 .container{max-width:900px;margin:auto;padding:10px;}
 .card{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:20px;margin:20px 0;box-shadow:0 0 15px rgba(241,196,15,0.3);}
 canvas{background:#000;border:4px solid var(--gold);display:block;margin:auto;border-radius:10px;}
-.controls{display:grid;grid-template-columns:repeat(3,75px);gap:10px;justify-content:center;margin-top:15px;}
+.controls{display:grid;grid-template-columns:repeat(3,75px);gap:10px;justify-content:center;margin-top:15px;} 
 .btn-ctrl{width:75px;height:75px;background:#fff8f0;border:2px solid var(--gold);color:var(--text);border-radius:15px;font-size:24px;cursor:pointer;box-shadow:0 0 5px rgba(241,196,15,0.5);}
 .btn-ctrl:active{background:var(--gold);color:black;}
 .scroll-box{height:100px;overflow-y:auto;background:#fff5e0;padding:10px;border-radius:10px;border:2px solid var(--gold);margin:10px 0;font-size:1.1rem;}
@@ -22,8 +129,7 @@ canvas{background:#000;border:4px solid var(--gold);display:block;margin:auto;bo
 #answer-feedback{display:none;padding:10px;margin:10px 0;font-weight:bold;color:white;border-radius:10px;}
 .footer{margin-top:50px; color:#555; font-size:1rem; line-height:1.5; text-align:center;}
 </style>
-</head>
-<body>
+
 
 <div class="rope"></div>
 <div class="container">
@@ -59,6 +165,122 @@ canvas{background:#000;border:4px solid var(--gold);display:block;margin:auto;bo
 </div>
 
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المسبحة الإلكترونية</title>
+    <style>
+        /* إعدادات الخلفية لتناسب موقعك */
+         {
+            background-color: #F5F5DC; /* لون بيج */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* حاوية المسبحة */
+        .tasbih-card {
+            background: #ffffff; /* أبيض صريح ليكسر البيج */
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); /* ظل ناعم جداً */
+            border: 1px solid #e0e0d1;
+            text-align: center;
+            width: 280px;
+        }
+
+        .tasbih-title {
+            color: #8B4513; /* بني خشبي */
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* شاشة الرقم */
+        #counter {
+            font-size: 85px;
+            color: #5D6D7E; /* رمادي مزرق غامق */
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* الزر الكبير */
+        .click-btn {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: none;
+            background: #6B8E23; /* أخضر زيتوني - يتناسق جداً مع البيج */
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #4B6318; /* ظل الزر */
+            transition: all 0.1s;
+            outline: none;
+        }
+
+        .click-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #4B6318;
+        }
+
+        /* زر التصفير */
+        .reset-btn {
+            margin-top: 25px;
+            background: none;
+            border: 1px solid #d1d1c0;
+            color: #a0a08b;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: #fdfdf5;
+            color: #8B4513;
+        }
+    </style>
+
+
+    <div class="tasbih-card">
+        <div class="tasbih-title">المسبحة الإلكترونية</div>
+        <div id="counter">0</div>
+        <button class="click-btn" onclick="hit()">سبّح</button>
+        <br>
+        <button class="reset-btn" onclick="reset()">تصفير العداد</button>
+    </div>
+
+    <script>
+        let count = 0;
+        const counterElement = document.getElementById('counter');
+
+        function hit() {
+            count++;
+            counterElement.innerText = count;
+            
+            // اهتزاز بسيط للموبايل
+            if (navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+        }
+
+        function reset() {
+            if(confirm("هل تريد تصفير العداد؟")) {
+                count = 0;
+                counterElement.innerText = count;
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
 <div class="card">
     <h2>🎮 متاهة الفوانيس</h2>
     <button id="start-btn" class="main-btn">ابدأ اللعبة</button>
@@ -81,14 +303,6 @@ canvas{background:#000;border:4px solid var(--gold);display:block;margin:auto;bo
 <p>السؤال: <span id="q-num">1</span>/100 | النقاط: <span id="quiz-score">0</span></p>
 </div>
 
-</div>
-
-<!-- Footer -->
-<div class="footer">
-هذا الموقع إهداء لشخص غالي H🥹♥️ <br> 
-اللهم اجعله في ميزان حسناتها 🤲🥹 <br>
-<span style="font-size: 0.8rem; opacity: 0.7;">(جميع الحقوق محفوظة ©)</span>
-</div>
 
 <script>
 // ====== الأدعية والأذكار ======
@@ -274,7 +488,7 @@ let qIdx=0, score=0;
 const questions=[
     {q:"كم عدد أركان الإسلام؟",o:["3","5","4","6"],c:1},
     {q:"ما هو الشهر الذي نزل فيه القرآن؟",o:["شوال","رمضان","شعبان","رجب"],c:1},
-    {q:"ما هي القبلة في الصلاة؟",o:["المدينة","الكعبة","القدس","مكة"],c:1},
+     {q:"ما هي القبلة في الصلاة؟",o:["المدينة","الكعبة","القدس","مكة"],c:1},
     {q:"ما هي اولى القبلتين؟",o:["المدينة","الكعبة","القدس","مكة"],c:2},
 ];
 
@@ -349,50 +563,4 @@ nextDua(); nextZekr(); loadQuiz();
 ">
     <img src="https://pbs.twimg.com/media/GwoZdivXoAAB2wN.jpg" alt="أذكار رمضان" style="width:100%; border-radius:15px; margin-bottom:15px;">
     <div style="text-align:right; line-height:1.6; font-size:1rem;">
-        - اللهم لا تؤاخذنا بما فعلنا من معاص وأخطاء، واغفر لنا واقض حوائجنا، وأعز الإسلام والمسلمين يا أرحم الراحمين.<br><br>
-        - ربنا إني أعوذ بك من علم لا ينفع، ومن قلب لا يخشع، ومن دعوة لا يُستجاب لها يا أرحم الراحمين.<br><br>
-        - اللهم إنا ندعوك ونتقرب لك بالدعاء إليك في الشهر الكريم، ونرجو رحمتك ونخشى عذابك فلا تردنا يا الله.<br><br>
-        - ربنا افتح لنا أبواب جنتك، وأدخلنا برحمتك، وتجاوز عن خطايانا ولا تنظر إلى أعمالنا السيئة يا رب العالمين.<br><br>
-        - اللهم إنا نسألك أن تشد على عضدنا من أجل طاعتك، واجعلنا من الملبين والخاشعين يا الله.<br><br>
-        - يا رب ارزقنا طاعتك مع الأخيار، وجنبنا مرافقة الأشرار، والابتعاد عن النار، وقربنا من دار القرار.<br><br>
-        - اللهم يا الله بلغنا شهر رمضان الكريم واجعلنا من المسلمين التائبين الخاشعين، واجعل قلوبنا خاشعة في طاعتك وحريصة على رضاك.<br><br>
-        - ربنا لا تخرجنا من شهر رمضان إلا وأنت راضٍ عنا واغفر لذنوبنا عاجلها ورجالها يا رب العالمين.<br><br>
-        - اللهم نبهنا إلى خياراته وبركاته، وارزقنا فيه بدعوة مستجابة تغفر ذنوبنا، ويعتق بها رقابنا من النار.<br><br>
-        * الأذكار القصيرة في رمضان: يا مقلب القلوب والأبصار، ثبت قلوبنا على دينك - سبحان الله وبحمده سبحان الله العظيم.<br><br>
-        - اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار.<br><br>
-        - إنا نعوذ بك يا الله من العجز والكسل، والجبن والبخل، وغلبة الدين وقهر الرجال.<br><br>
-        - اللهم أنى أسألك باسمك الأعظم ألا تكلني إلى نفسي طرفة عين، وأعني على رضاك وطاعتك.<br><br>
-        - يا مقلب القلوب والأبصار، ثبت قلوبنا على دينك.<br><br>
-        - اللهم ارزقنا العفو والعافية في الدنيا والآخرة، اللهم لا ترد دعاءنا يا رب العالمين.<br><br>
-        - أسأل الله الكريم رب العرش العظيم أن يغفر لنا ذنوبنا، وإسرافنا في أمرنا، وثبت أقدامنا على طاعتك.<br><br>
-        - اللهم أصلح لي ديني الذي هو عصمة أمري، وأصلح لي دنياي التي فيها معاشي، وأصلح لي آخرتي التي إليها معادي.<br><br>
-        - ربنا اجعل الحياة زيادة لي في كل خير، واجعل الموت راحة لي من كل شر، ولا تتوفنا إلا وأنت راضٍ عنا اللهم قرّبني فيه إلى مرضاتك، وجنّبني فيه من سخطك ونقماتك، ووفّقني فيه لقراءة آياتك برحمتك يا أرحم الراحمين.<br><br>
-        - اللهم اجعلني فيه من المستغفرين، ومن عبادك الصالحين القانتين، واجعلني فيه من أوليائك المُتّقين برأفتك يا أرحم الراحمين.<br><br>
-        - اللهم أعنّي فيه على صيامه وقيامه، وجنّبني فيه من هفواته وآثامه، وارزقني فيه ذكرك وشكرك بدوامه وبتوفيقك يا هادي المُضلّين.
-    </div>
-    <button onclick="document.getElementById('azkar-modal').style.display='none'" style="
-        margin-top:15px;
-        padding:10px 20px;
-        border:none;
-        border-radius:10px;
-        background:#ffcc00;
-        color:#000;
-        font-weight:bold;
-        cursor:pointer;
-        display:block;
-        margin-left:auto;
-        margin-right:auto;
-    ">إغلاق</button>
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const firstBox = document.querySelectorAll('.bottom-section .box')[0];
-    if (firstBox) {
-        firstBox.onclick = function() {
-            document.getElementById('azkar-modal').style.display = 'block';
-        };
-    }
-});
-</script>
-</body>
-</html>
+        - اللهم لا تؤاخذنا بما فعلنا من معاص وأخطاء، و
